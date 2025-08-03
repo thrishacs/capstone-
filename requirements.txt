@@ -1,0 +1,31 @@
+# Core Libraries (GPU-accelerated)
+torch==2.2.2
+torchvision==0.17.2
+torchaudio==2.2.2
+# Install from PyTorch's index:
+# pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+
+# TensorFlow with GPU
+tensorflow==2.15.0
+
+# Image Processing & Augmentations
+numpy==1.26.4
+opencv-python==4.11.0.86
+Pillow==10.3.0
+scikit-learn==1.4.1.post1
+matplotlib==3.8.4
+
+# Spotify Integration
+spotipy==2.23.0
+pyttsx3==2.90
+pygame==2.5.2
+
+# GUI (Tkinter - built-in)
+# No need to install tkinter separately
+
+# Flask API (for mobile sync)
+Flask==3.0.2
+
+# Optional for browser fallback/audio
+pycaw==20230407
+pywebview==4.3.1
