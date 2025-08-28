@@ -194,7 +194,7 @@ transform = transforms.Compose([
 root = tk.Tk()
 root.title("Emotion Detection GUI")
 root.geometry("500x300")
-root.configure(bg="#f0f8ff")
+root.configure(bg="#0f0fe2")
 
 status_icon = tk.StringVar()
 status_icon.set("⏸️")

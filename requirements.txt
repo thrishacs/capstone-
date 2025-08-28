@@ -24,7 +24,11 @@ pygame==2.5.2
 # No need to install tkinter separately
 
 # Flask API (for mobile sync)
-Flask==3.0.2
+Flask==3.0.3
+Flask-Cors==4.0.1
+SQLAlchemy==2.0.30
+Flask-SQLAlchemy==3.1.1
+
 
 # Optional for browser fallback/audio
 pycaw==20230407

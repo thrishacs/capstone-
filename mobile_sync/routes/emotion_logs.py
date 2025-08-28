@@ -1,21 +1,23 @@
 from flask import Blueprint, jsonify, request
-from services.log_services import get_emotion_logs, add_emotion_log
+from services.log_services import save_log, get_logs
 
-emotion_bp = Blueprint('emotion_bp', __name__)
+emotion_logs_bp = Blueprint("emotion_logs", __name__)
 
-@emotion_bp.route('/api/logs', methods=['GET'])
+# POST → Save log
+@emotion_logs_bp.route("/", methods=["POST"])
+def add_log():
+    data = request.get_json()
+    emotion = data.get("emotion")
+    timestamp = data.get("timestamp")
+
+    if not emotion or not timestamp:
+        return jsonify({"error": "Missing fields"}), 400
+
+    save_log(emotion, timestamp)
+    return jsonify({"message": "Log saved"}), 201
+
+# GET → Retrieve logs
+@emotion_logs_bp.route("/", methods=["GET"])
 def fetch_logs():
-    logs = get_emotion_logs()
-    return jsonify([{
-        'emotion': log.emotion,
-        'timestamp': log.timestamp.isoformat()
-    } for log in logs])
-
-@emotion_bp.route('/api/logs', methods=['POST'])
-def create_log():
-    data = request.json
-    emotion = data.get('emotion')
-    if emotion:
-        add_emotion_log(emotion)
-        return jsonify({'message': 'Log added'}), 201
-    return jsonify({'error': 'Missing emotion'}), 400
+    logs = get_logs()
+    return jsonify(logs), 200

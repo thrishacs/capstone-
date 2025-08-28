@@ -1,12 +1,12 @@
-from sqlalchemy import Column, Integer, String, DateTime
-from sqlalchemy.ext.declarative import declarative_base
+# mobile_sync/database/models.py
+from sqlalchemy import Column, Integer, String, Float, DateTime
 from datetime import datetime
-
-Base = declarative_base()
+from database.db_setup import Base
 
 class EmotionLog(Base):
-    __tablename__ = 'emotion_logs'
-    
-    id = Column(Integer, primary_key=True)
-    emotion = Column(String)
+    __tablename__ = "emotion_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    emotion = Column(String, index=True)
+    confidence = Column(Float)
     timestamp = Column(DateTime, default=datetime.utcnow)
