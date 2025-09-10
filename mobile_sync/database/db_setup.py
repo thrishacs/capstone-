@@ -1,16 +1,21 @@
-# mobile_sync/database/db_setup.py
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, declarative_base
+import os
 
-# SQLite database (you can switch to PostgreSQL/MySQL later)
-DATABASE_URL = "sqlite:///./emotion_logs.db"
+# Base directory of this file
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Create engine
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+# Store DB inside mobile_sync/database/
+DB_PATH = os.path.join(BASE_DIR, "emotion_logs.db")
 
-# Session local
+# Full SQLite URL
+SQLALCHEMY_DATABASE_URL = f"sqlite:///{DB_PATH}"
+
+# Engine
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+)
+
+# Session and Base
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-# Base class for models
 Base = declarative_base()

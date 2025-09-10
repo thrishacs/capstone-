@@ -10,6 +10,7 @@ import pyttsx3
 import random
 from PIL import Image
 import os
+import sys
 import csv
 from pygame import mixer
 import tkinter as tk
@@ -17,6 +18,9 @@ from tkinter import messagebox
 from tkinter import ttk
 import matplotlib.pyplot as plt
 from collections import Counter
+# ✅ Add CAPSTONE parent path for imports
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from mobile_sync.services.log_services import save_log
 
 # ✅ Spotify Credentials
 SPOTIPY_CLIENT_ID = 'dcef7601624b45d79b3a9ecf762844fd'
@@ -47,7 +51,7 @@ model.fc = nn.Sequential(
     nn.Dropout(0.5),
     nn.Linear(256, 7)
 )
-model.load_state_dict(torch.load("../models/emotion_model_resnet50.pth", map_location=device))
+model.load_state_dict(torch.load(r"D:\CAPSTONE\models\emotion_model_resnet50.pth", map_location=device))
 model.to(device)
 model.eval()
 
@@ -67,11 +71,11 @@ emotion_tracks = {
 mixer.init()
 engine = pyttsx3.init()
 engine.setProperty('rate', 150)
-ASSETS_PATH = "../assets"
-LOG_FILE = "../logs/emotion_log.csv"
+ASSETS_PATH = r"D:\CAPSTONE\assets"
+LOG_FILE = r"D:\CAPSTONE\logs\emotion_log.csv"
 os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
 
-# ✅ Log Emotion to CSV
+# ✅ Log Emotion to CSV + DB
 def log_emotion(emotion, confidence):
     try:
         file_exists = os.path.isfile(LOG_FILE)
@@ -81,9 +85,18 @@ def log_emotion(emotion, confidence):
                 writer.writerow(["Timestamp", "Emotion", "Confidence"])
             writer.writerow([time.strftime('%Y-%m-%d %H:%M:%S'), emotion, f"{confidence * 100:.2f}%"])
             f.flush()
-            print("📝 Emotion logged successfully.")
+            print("📝 Emotion logged to CSV.")
+
+        # ✅ Also log to DB
+        try:
+            save_log(emotion, float(confidence))
+            print("🗄️ Emotion logged to Database.")
+        except Exception as db_err:
+            print(f"⚠️ Failed to log emotion to DB: {db_err}")
+
     except Exception as e:
         print(f"⚠️ Failed to log emotion: {e}")
+
 
 # ✅ Plot Emotion Trends
 def plot_emotion_trends():
@@ -194,7 +207,7 @@ transform = transforms.Compose([
 root = tk.Tk()
 root.title("Emotion Detection GUI")
 root.geometry("500x300")
-root.configure(bg="#0f0fe2")
+root.configure(bg="#5c5cdc")
 
 status_icon = tk.StringVar()
 status_icon.set("⏸️")
